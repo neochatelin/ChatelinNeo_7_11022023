@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Les petits plats</title>
+    <link rel="shortcut icon" href="../asset/faveicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../style/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css" integrity="sha512-SbiR/eusphKoMVVXysTKG/7VseWii+Y3FdHrt0EpKgpToZeemhqHeZeLWLhJutz/2ut2Vw1uQEj2MbRF+TVBUA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css" integrity="sha512-YFENbnqHbCRmJt5d+9lHimyEMt8LKSNTMLSaHjvsclnZGICeY/0KYEeiHwD1Ux4Tcao0h60tdcMv+0GljvWyHg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <header>
+        <img src="../asset/logo.png" alt="logo Les petits plats">
+        <form>
+            <input type="text" class="form-control recipesResearch" placeholder="Rechercher une recette">
+            <tag></tag>
+            <div>
+                <tag_selector name="Ingredient" color="#3282f7"></tag_selector>
+                <tag_selector name="Appareils" color="#68d9a4"></tag_selector>
+                <tag_selector name="Ustensiles" color="#ed6454"></tag_selector>
+            </div>
+        </form>
+    </header>
+    <main></main>
+    <script src="../src/pages/index.js" type="module"></script>
+    <script src="../src/utils/TagSelection.js" type="module"></script>
+</body>
+</html>

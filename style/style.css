@@ -1,0 +1,71 @@
+@import url('./tagSelection.css');
+
+*{
+    margin: 0;
+    padding: 0;
+}
+header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 10vw;
+}header img{
+    width: 300px;
+    margin: 30px;
+}header>form{
+    width: 100%;
+}header>form>div{
+    display: flex;
+    gap: 20px;
+    width: 100%;
+}header .recipesResearch{
+    width: 100%;
+    background-color: #e7e7e7;
+    border: none;
+}header .recipesResearch::after{
+    content: 'x';
+}.color-ingerdients{
+    background-color: #3282f7;
+    color: white;
+}
+
+main{
+    margin: 0 10vw;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+    
+}main .card{
+    margin: 25px 0;
+    height: 364px;
+    max-width: 380px;
+    width: 380px;
+    background-color: #e7e7e7;
+    border: none;
+
+}main .card .card-img-top{
+    width: 380px;
+    min-height: 178px;
+    background-color: #c7bebe;
+    color: #c7bebe;
+    height: 178px;
+}.card-header-container{
+    display: flex;
+    justify-content: space-between;
+}.card-header-container div{
+    display: flex;
+}.card-header-container div i{
+    margin-right: 5px;
+}.card-main-container{
+    display: flex;
+}.card-description, .card-ingredients{
+    width: 171px;
+    height: 109px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-size: 12px;
+}.card-ingredients div{
+    display: flex;
+    height: 14.4px;
+}
