@@ -1,6 +1,5 @@
 1
 
--implementer l'interface
 -valider au w3c
 -planifie 2 versions de la fonctionnalite a tester (while, for)(foreach, filter, map, reduce)
     faire un document d’investigation de fonctionnalité le remplire autant que possible
@@ -11,4 +10,3 @@
 2-utilise 2 branches différentes sur git
 
 3-faire des test de performance
-
