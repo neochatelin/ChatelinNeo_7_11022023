@@ -93,7 +93,6 @@ class TagSelection{
 		elem.style.backgroundColor = e.attributes.color.value;
 		elem.textContent = e.attributes.name.value;
 		e.appendChild(elem);
-		this.getTag();
 	}
 	constructor(){
 		this.tagAdded = {};

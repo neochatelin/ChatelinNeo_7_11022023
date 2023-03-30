@@ -2,19 +2,12 @@ import { recipes } from "../data/recipes.js";
 import { TagModel } from "../utils/TagSelection.js";
 
 class apiRecipes{
-	#load(){
-		this.file = recipes;
-	}
 	#capitalizeFirstLetter(string) {
 		return string.charAt(0).toUpperCase() + string.slice(1);
 	}
-	constructor(){
-		this.#load();
-		this.recipes = this.file;
-	}
 	getIngredients(){
 		this.ingredients = [];
-		this.recipes.forEach((e)=>{    
+		recipes.forEach((e)=>{    
 			(e.ingredients).forEach((e2)=>{
 				if (!this.ingredients.find((e)=> e === (this.#capitalizeFirstLetter(e2.ingredient)))) {
 					this.ingredients.push(this.#capitalizeFirstLetter(e2.ingredient));
@@ -26,7 +19,7 @@ class apiRecipes{
 	}
 	getAppliance(){
 		this.appliance = [];
-		this.recipes.forEach((e)=>{
+		recipes.forEach((e)=>{
 			if (!this.appliance.find((f)=> f === (this.#capitalizeFirstLetter(e.appliance)))) {
 				this.appliance.push(this.#capitalizeFirstLetter(e.appliance));
 			}
@@ -36,7 +29,7 @@ class apiRecipes{
 	}
 	getUstensils(){
 		this.ustensils = [];
-		this.recipes.forEach((e)=>{
+		recipes.forEach((e)=>{
 			(e.ustensils).forEach((e2)=>{
 				if (!this.ustensils.find((e)=> e === (this.#capitalizeFirstLetter(e2)))) {
 					this.ustensils.push(this.#capitalizeFirstLetter(e2));
@@ -47,15 +40,15 @@ class apiRecipes{
 		return this.ustensils;
 	}
 	getAllRecipes(){
-		return this.file;
+		return recipes;
 	}
 	researchRecipes(research){
 		let array = [];
 		if (research.length < 3) {
-			array = this.getAllRecipes();
+			array = recipes;
 		}else{
-			for (let index = 0; index < this.file.length; index++) {
-				const recipe = this.file[index];
+			for (let index = 0; index < recipes.length; index++) {
+				const recipe = recipes[index];
 				let added = false;
 				if(recipe.name.toLowerCase().match(`W*(${research.toLowerCase()})W*`)){
 					array.push(recipe);
@@ -74,38 +67,39 @@ class apiRecipes{
 				}
 			}
 		}
-		this.recipes = array;
         
 		let tags = TagModel.getTag();
+		console.log(recipes);
+
 		for (let index = 0; index < Object.keys(tags).length; index++) {
 			const   tagCategorie = Object.keys(tags)[index],
 				tagsList = tags[Object.keys(tags)[index]];
 			let remove = true;
+			let deleteList = [];
 			switch (tagCategorie) {
 			case "Ingredient":
-				console.clear();
 				if (tagsList.length == 0) {
 					break;
 				}
-				for (let index = 0; index < array.length; index++) {
-					const ingredients = array[index].ingredients;
-					console.log(array[index]);
+				for (let indexRecipe = 0; indexRecipe < array.length; indexRecipe++) {
+					const ingredients = array[indexRecipe].ingredients;
 					for (let index = 0; index < tagsList.length; index++) {
 						const tag = tagsList[index];
+						remove = true;
 						for (let index = 0; index < ingredients.length; index++) {
 							const ingredient = ingredients[index].ingredient;
-							remove = true;
 							if(ingredient == tag){
 								remove = false;
-								break;
 							}
-						}	
+						}
 						if (remove) {
-							break;
+							deleteList.push(indexRecipe);
 						}
 					}
-					if (remove) {
-						array.splice(index, 1);
+				}
+				if (deleteList.length > 0) {
+					for (let index = 0; index < deleteList.length; index++) {
+						array.splice(deleteList[index]-index, 1);
 					}
 				}
                     
@@ -114,19 +108,22 @@ class apiRecipes{
 				if (tagsList.length == 0) {
 					break;
 				}
-				for (let index = 0; index < array.length; index++) {
-					console.log(array[index]);
-					console.log(index);
-					const recipe = array[index];
+				for (let indexRecipe = 0; indexRecipe < array.length; indexRecipe++) {
+					const recipe = array[indexRecipe];
+					remove = true;
 					for (let index = 0; index < tagsList.length; index++) {
 						const tag = tagsList[index];
-						remove = true;
 						if(recipe.appliance == tag){
 							remove = false;
 						}
 					}
 					if (remove) {
-						array.splice(index, 1);
+						deleteList.push(indexRecipe);
+					}
+				}
+				if (deleteList.length > 0) {
+					for (let index = 0; index < deleteList.length; index++) {
+						array.splice(deleteList[index]-index, 1);
 					}
 				}
 				break;
@@ -134,16 +131,28 @@ class apiRecipes{
 				if (tagsList.length == 0) {
 					break;
 				}
-				for (let index = 0; index < array.length; index++) {
-					console.log(array[index]);
-					console.log(index);
-					const recipe = array[index];
-					for (let index = 0; index < recipe.ustensils.length; index++) {
-						const ustensil = recipe.ustensils[index];
-                            
+				for (let indexRecipe = 0; indexRecipe < array.length; indexRecipe++) {
+					const recipe = array[indexRecipe];
+					for (let index = 0; index < tagsList.length; index++) {
+						const tag = tagsList[index];
+						remove = true;
+						for (let index = 0; index < recipe.ustensils.length; index++) {
+							const ustensil = (recipe.ustensils[index]).toLowerCase();
+							if(ustensil == tag.toLowerCase()){
+								remove = false;
+							}
+						}
+						if(recipe.appliance == tag){
+							remove = false;
+						}
 					}
 					if (remove) {
-						array.splice(index, 1);
+						deleteList.push(indexRecipe);
+					}
+				}
+				if (deleteList.length > 0) {
+					for (let index = 0; index < deleteList.length; index++) {
+						array.splice(deleteList[index]-index, 1);
 					}
 				}
 				break;
@@ -151,6 +160,7 @@ class apiRecipes{
 				break;
 			}
 		}
+		console.log(array);
 		return array;
 	}
 	researchRecipes2(research){
@@ -158,7 +168,7 @@ class apiRecipes{
 		if (research.length < 3) {
 			array = this.getAllRecipes();
 		}else{
-			this.file.map((recipe)=>{
+			recipes.map((recipe)=>{
 				let added = false;
 				if(recipe.name.toLowerCase().match(`W*(${research.toLowerCase()})W*`)){
 					array.push(recipe);
