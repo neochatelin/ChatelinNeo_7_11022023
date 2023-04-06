@@ -47,119 +47,107 @@ class apiRecipes{
 		if (research.length < 3) {
 			array = recipes.slice();
 		}else{
-			for (let index = 0; index < recipes.length; index++) {
-				const recipe = recipes[index];
+			recipes.map((recipe)=>{
 				let added = false;
 				if(recipe.name.toLowerCase().match(`W*(${research.toLowerCase()})W*`)){
 					array.push(recipe);
 					added = true;
 				}if(!added){
-					for (let indexIngredients = 0; indexIngredients < recipe.ingredients.length; indexIngredients++) {
-						const ingredient = recipe.ingredients[indexIngredients].ingredient;
-						if(ingredient.toLowerCase().match(`W*(${research.toLowerCase()})W*`)){
-							array.push(recipe);
-							added = true;
-						}
-					}
+					recipe.ingredients.find(ingredient=>ingredient.ingredient.toLowerCase().match(`W*(${research.toLowerCase()})W*`) != undefined ?(array.push(recipe), added = true) : "");
 				}if(!added && recipe.description.toLowerCase().match(`W*(${research.toLowerCase()})W*`)){
 					array.push(recipe);
 					added = true;
 				}
-			}
+			});
 		}
-        
+
 		let tags = TagModel.getTag();
 
-		for (let index = 0; index < Object.keys(tags).length; index++) {
-			const   tagCategorie = Object.keys(tags)[index],
-				tagsList = tags[Object.keys(tags)[index]];
-			let remove = true;
-			let deleteList = [];
+		Object.keys(tags).forEach((tagCategorie)=>{
+			let remove = true,
+				deleteList = [],
+				tagsList = tags[tagCategorie];
+			
 			switch (tagCategorie) {
 			case "Ingredient":
 				if (tagsList.length == 0) {
 					break;
 				}
-				for (let indexRecipe = 0; indexRecipe < array.length; indexRecipe++) {
-					const ingredients = array[indexRecipe].ingredients;
-					for (let index = 0; index < tagsList.length; index++) {
-						const tag = tagsList[index];
+				array.map((value, indexRecipe)=>{
+					const ingredients = value.ingredients;
+					tagsList.map((value)=>{
+						const tag = value;
 						remove = true;
-						for (let index = 0; index < ingredients.length; index++) {
-							const ingredient = ingredients[index].ingredient;
+						ingredients.map((value)=>{
+							const ingredient = value.ingredient;
 							if(ingredient == tag){
 								remove = false;
 							}
-						}
+						});
 						if (remove) {
 							deleteList.push(indexRecipe);
 						}
-					}
-				}
+					});
+				});
 				if (deleteList.length > 0) {
-					for (let index = 0; index < deleteList.length; index++) {
-						array.splice(deleteList[index]-index, 1);
-					}
+					deleteList.map((value, index)=>{
+						array.splice(value-index, 1);
+					});
 				}
-                    
 				break;
-			case "Appareils"://appliance
+			case "Appareils":
 				if (tagsList.length == 0) {
 					break;
 				}
-				for (let indexRecipe = 0; indexRecipe < array.length; indexRecipe++) {
-					const recipe = array[indexRecipe];
+				array.map((recipe, indexRecipe)=>{
 					remove = true;
-					for (let index = 0; index < tagsList.length; index++) {
-						const tag = tagsList[index];
+					tagsList.map((tag)=>{
 						if(recipe.appliance == tag){
 							remove = false;
 						}
-					}
+					});
 					if (remove) {
 						deleteList.push(indexRecipe);
 					}
-				}
+				});
 				if (deleteList.length > 0) {
-					for (let index = 0; index < deleteList.length; index++) {
-						array.splice(deleteList[index]-index, 1);
-					}
+					deleteList.map((value, index)=>{
+						array.splice(value-index, 1);
+					});
 				}
+				
 				break;
 			case "Ustensiles"://ustensils
 				if (tagsList.length == 0) {
 					break;
 				}
-				for (let indexRecipe = 0; indexRecipe < array.length; indexRecipe++) {
-					const recipe = array[indexRecipe];
-					for (let index = 0; index < tagsList.length; index++) {
-						const tag = tagsList[index];
+				array.map((recipe, indexRecipe)=>{
+					tagsList.map((tag)=>{
 						remove = true;
-						for (let index = 0; index < recipe.ustensils.length; index++) {
-							const ustensil = (recipe.ustensils[index]).toLowerCase();
-							if(ustensil == tag.toLowerCase()){
+						recipe.ustensils.map((ustensil)=>{
+							if(ustensil.toLowerCase() == tag.toLowerCase()){
 								remove = false;
 							}
-						}
+						});
 						if(recipe.appliance == tag){
 							remove = false;
 						}
-					}
+					});
 					if (remove) {
 						deleteList.push(indexRecipe);
 					}
-				}
+				});
 				if (deleteList.length > 0) {
-					for (let index = 0; index < deleteList.length; index++) {
-						array.splice(deleteList[index]-index, 1);
-					}
+					deleteList.map((value, index)=>{
+						array.splice(value-index, 1);
+					});
 				}
+
 				break;
 			default:
 				break;
 			}
-		}
-		console.log(array);
+		});
 		return array;
 	}
     
