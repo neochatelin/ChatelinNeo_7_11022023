@@ -4,12 +4,12 @@ import { TagModel } from "../utils/TagSelection.js";
 
 let display = ()=>{
 	document.querySelector(".recipesResearch").addEventListener("input", (e)=>{
-		recipesCardFactorieModel.getDom(apiRecipesModel.researchRecipes(e.target.value));
+		recipesCardFactorieModel.getDom(apiRecipesModel.researchRecipes2(e.target.value));
 	});
 	window.addEventListener("click", (e)=>{
 		console.log( TagModel.getTag());
 		if(e.target.tagName == "BUTTON"){
-			recipesCardFactorieModel.getDom(apiRecipesModel.researchRecipes(document.querySelector(".recipesResearch").value));
+			recipesCardFactorieModel.getDom(apiRecipesModel.researchRecipes2(document.querySelector(".recipesResearch").value));
 		}
 	});
 	recipesCardFactorieModel.getDom(apiRecipesModel.getAllRecipes());

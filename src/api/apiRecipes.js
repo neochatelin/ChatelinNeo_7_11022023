@@ -1,4 +1,4 @@
-import { recipes } from "../data/recipes.js";
+import { recipes } from "../../data/recipes.js";
 import { TagModel } from "../utils/TagSelection.js";
 
 class apiRecipes{
@@ -45,7 +45,7 @@ class apiRecipes{
 	researchRecipes(research){
 		let array = [];
 		if (research.length < 3) {
-			array = recipes;
+			array = recipes.slice();
 		}else{
 			for (let index = 0; index < recipes.length; index++) {
 				const recipe = recipes[index];
@@ -69,7 +69,6 @@ class apiRecipes{
 		}
         
 		let tags = TagModel.getTag();
-		console.log(recipes);
 
 		for (let index = 0; index < Object.keys(tags).length; index++) {
 			const   tagCategorie = Object.keys(tags)[index],
@@ -166,7 +165,7 @@ class apiRecipes{
 	researchRecipes2(research){
 		let array = [];
 		if (research.length < 3) {
-			array = this.getAllRecipes();
+			array = recipes.slice();
 		}else{
 			recipes.map((recipe)=>{
 				let added = false;
@@ -181,11 +180,93 @@ class apiRecipes{
 				}
 			});
 		}
+
 		let tags = TagModel.getTag();
+
 		Object.keys(tags).forEach((tagCategorie)=>{
-			tags[tagCategorie].map(tag=>{
-                
-			});
+			let remove = true,
+				deleteList = [],
+				tagsList = tags[tagCategorie];
+			
+			switch (tagCategorie) {
+			case "Ingredient":
+				if (tagsList.length == 0) {
+					break;
+				}
+				array.map((value, indexRecipe)=>{
+					const ingredients = value.ingredients;
+					tagsList.map((value)=>{
+						const tag = value;
+						remove = true;
+						ingredients.map((value)=>{
+							const ingredient = value.ingredient;
+							if(ingredient == tag){
+								remove = false;
+							}
+						});
+						if (remove) {
+							deleteList.push(indexRecipe);
+						}
+					});
+				});
+				if (deleteList.length > 0) {
+					deleteList.map((value, index)=>{
+						array.splice(value-index, 1);
+					});
+				}
+				break;
+			case "Appareils":
+				if (tagsList.length == 0) {
+					break;
+				}
+				array.map((recipe, indexRecipe)=>{
+					remove = true;
+					tagsList.map((tag)=>{
+						if(recipe.appliance == tag){
+							remove = false;
+						}
+					});
+					if (remove) {
+						deleteList.push(indexRecipe);
+					}
+				});
+				if (deleteList.length > 0) {
+					deleteList.map((value, index)=>{
+						array.splice(value-index, 1);
+					});
+				}
+				
+				break;
+			case "Ustensiles"://ustensils
+				if (tagsList.length == 0) {
+					break;
+				}
+				array.map((recipe, indexRecipe)=>{
+					tagsList.map((tag)=>{
+						remove = true;
+						recipe.ustensils.map((ustensil)=>{
+							if(ustensil.toLowerCase() == tag.toLowerCase()){
+								remove = false;
+							}
+						});
+						if(recipe.appliance == tag){
+							remove = false;
+						}
+					});
+					if (remove) {
+						deleteList.push(indexRecipe);
+					}
+				});
+				if (deleteList.length > 0) {
+					deleteList.map((value, index)=>{
+						array.splice(value-index, 1);
+					});
+				}
+
+				break;
+			default:
+				break;
+			}
 		});
 		return array;
 	}
